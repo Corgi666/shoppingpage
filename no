@@ -1,0 +1,603 @@
+[33mcommit c3f21c26129cae513bf123d417f92b6d74a8dee4[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Corgi666 <anuchit.k1996@gmail.com>
+Date:   Wed Dec 14 10:44:11 2022 +0700
+
+    pust 1st project
+
+[1mdiff --git a/lib/home/food_page_body.dart b/lib/home/food_page_body.dart[m
+[1mnew file mode 100644[m
+[1mindex 0000000..685d7d2[m
+[1m--- /dev/null[m
+[1m+++ b/lib/home/food_page_body.dart[m
+[36m@@ -0,0 +1,214 @@[m
+[32m+[m[32mimport 'package:ecommerce/utils/colors.dart';[m
+[32m+[m[32mimport 'package:ecommerce/widgets/big_text.dart';[m
+[32m+[m[32mimport 'package:ecommerce/widgets/icon_add_text.dart';[m
+[32m+[m[32mimport 'package:ecommerce/widgets/small_text.dart';[m
+[32m+[m[32mimport 'package:flutter/material.dart';[m
+[32m+[m
+[32m+[m[32mclass FoodPageBody extends StatefulWidget {[m
+[32m+[m[32m  const FoodPageBody({super.key});[m
+[32m+[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  State<FoodPageBody> createState() => _FoodPageBodyState();[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mclass _FoodPageBodyState extends State<FoodPageBody> {[m
+[32m+[m[32m  // Stack Controller[m
+[32m+[m[32m  PageController pageController = PageController(viewportFraction: 0.85);[m
+[32m+[m[32m  var _currPageValue = 0.0;[m
+[32m+[m[32m  double scaleFactor = 0.8;[m
+[32m+[m[32m  double _heigt = 220;[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  void initState() {[m
+[32m+[m[32m    super.initState();[m
+[32m+[m[32m    pageController.addListener(() {[m
+[32m+[m[32m      setState(() {[m
+[32m+[m[32m        _currPageValue = pageController.page!;[m
+[32m+[m[32m        print('Current value' + _currPageValue.toString());[m
+[32m+[m[32m      });[m
+[32m+[m[32m    });[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m// end of stack controller[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  void dispose() {[m
+[32m+[m[32m    pageController.dispose();[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  Widget build(BuildContext context) {[m
+[32m+[m[32m    return PageView.builder([m
+[32m+[m[32m        controller: pageController,[m
+[32m+[m[32m        itemCount: 5,[m
+[32m+[m[32m        itemBuilder: (context, positon) {[m
+[32m+[m[32m          return _buildPageItem(positon);[m
+[32m+[m[32m        });[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  Widget _buildPageItem(int index) {[m
+[32m+[m[32m    // Matrix Slide Stack widget[m
+[32m+[m
+[32m+[m[32m    Matrix4 matrix = new Matrix4.identity();[m
+[32m+[m[32m    if (index == _currPageValue.floor()) {[m
+[32m+[m[32m      var currScale = 1 - (_currPageValue - index) * (1 - scaleFactor);[m
+[32m+[m[32m      var currTrans = _heigt * (1 - currScale) / 2;[m
+[32m+[m
+[32m+[m[32m      matrix = Matrix4.diagonal3Values(1, currScale, 1)[m
+[32m+[m[32m        ..setTranslationRaw(0, currTrans, 0);[m
+[32m+[m[32m    } else if (index == _currPageValue.floor() + 1) {[m
+[32m+[m[32m      var currScale =[m
+[32m+[m[32m          scaleFactor + (_currPageValue - index + 1) * (1 - scaleFactor);[m
+[32m+[m[32m      var currTrans = _heigt * (1 - currScale) / 2;[m
+[32m+[m[32m      matrix = Matrix4.diagonal3Values(1, currScale, 1);[m
+[32m+[m[32m      matrix = Matrix4.diagonal3Values(1, currScale, 1)[m
+[32m+[m[32m        ..setTranslationRaw(0, currTrans, 0);[m
+[32m+[m[32m    } else if (index == _currPageValue.floor() - 1) {[m
+[32m+[m[32m      var currScale = 1 - (_currPageValue - index) * (1 - scaleFactor);[m
+[32m+[m[32m      var currTrans = _heigt * (1 - currScale) / 2;[m
+[32m+[m[32m      matrix = Matrix4.diagonal3Values(1, currScale, 1);[m
+[32m+[m[32m      matrix = Matrix4.diagonal3Values(1, currScale, 1)[m
+[32m+[m[32m        ..setTranslationRaw(0, currTrans, 0);[m
+[32m+[m[32m    } else {[m
+[32m+[m[32m      var currScale = 0.8;[m
+[32m+[m[32m      matrix = Matrix4.diagonal3Values(1, currScale, 1)[m
+[32m+[m[32m        ..setTranslationRaw(0, _heigt * (1 - scaleFactor) / 2, 1);[m
+[32m+[m[32m    }[m
+[32m+[m[32m    // End of Matrix[m
+[32m+[m[32m    return Container([m
+[32m+[m[32m      child: Transform([m
+[32m+[m[32m        transform: matrix,[m
+[32m+[m[32m        child: Stack([m
+[32m+[m[32m          children: [[m
+[32m+[m[32m            Container([m
+[32m+[m[32m              height: 220,[m
+[32m+[m[32m              margin: EdgeInsets.only(left: 5, right: 5),[m
+[32m+[m[32m              decoration: BoxDecoration([m
+[32m+[m[32m                  borderRadius: BorderRadius.circular(30),[m
+[32m+[m[32m                  color: index.isEven ? Color(0xFF69c5df) : Colors.black,[m
+[32m+[m[32m                  image: DecorationImage([m
+[32m+[m[32m                      image: AssetImage('assets/image/food0.png'),[m
+[32m+[m[32m                      fit: BoxFit.cover)),[m
+[32m+[m[32m            ),[m
+[32m+[m[32m            Align([m
+[32m+[m[32m              alignment: Alignment.bottomCenter,[m
+[32m+[m[32m              child: Container([m
+[32m+[m[32m                height: 160,[m
+[32m+[m[32m                width: 350,[m
+[32m+[m[32m                margin: EdgeInsets.only(left: 30, right: 30, bottom: 15),[m
+[32m+[m[32m                decoration: BoxDecoration([m
+[32m+[m[32m                  borderRadius: BorderRadius.circular(30),[m
+[32m+[m[32m                  boxShadow: [[m
+[32m+[m[32m                    BoxShadow([m
+[32m+[m[32m                        color: Color(0xFFe8e8e8),[m
+[32m+[m[32m                        offset: Offset(0, 5),[m
+[32m+[m[32m                        blurRadius: 5),[m
+[32m+[m[32m                    BoxShadow(color: Colors.white, offset: Offset(-5, 0)),BoxShadow(color: Colors.white,offset: Offset(5,0))[m
+[32m+[m[32m                  ],[m
+[32m+[m[32m                  color: Colors.white,[m
+[32m+[m[32m                ),[m
+[32m+[m[32m                child: Container([m
+[32m+[m[32m                  padding: EdgeInsets.only(top: 25, left: 15, right: 15),[m
+[32m+[m[32m                  child: Column([m
+[32m+[m[32m                    crossAxisAlignment: CrossAxisAlignment.start,[m
+[32m+[m[32m                    children: [[m
+[32m+[m[32m                      BigText(text: 'Chinese Side'),[m
+[32m+[m[32m                      SizedBox([m
+[32m+[m[32m                        height: 10,[m
+[32m+[m[32m                      ),[m
+[32m+[m[32m                      Row([m
+[32m+[m[32m                        //  mainAxisAlignment: MainAxisAlignment.spaceAround,[m
+[32m+[m[32m                        children: [[m
+[32m+[m[32m                          Wrap([m
+[32m+[m[32m                            children: [[m
+[32m+[m[32m                              Icon([m
+[32m+[m[32m                                Icons.star,[m
+[32m+[m[32m                                size: 13,[m
+[32m+[m[32m                                color: AppColors.mainColor,[m
+[32m+[m[32m                              ),[m
+[32m+[m[32m                              Icon([m
+[32m+[m[32m                                Icons.star,[m
+[32m+[m[32m                                color: AppColors.mainColor,[m
+[32m+[m[32m                                size: 13,[m
+[32m+[m[32m                              ),[m
+[32m+[m[32m                              Icon([m
+[32m+[m[32m                                Icons.star,[m
+[32m+[m[32m                                color: AppColors.mainColor,[m
+[32m+[m[32m                                size: 13,[m
+[32m+[m[32m                              ),[m
+[32m+[m[32m                              Icon([m
+[32m+[m[32m                                Icons.star,[m
+[32m+[m[32m                                color: AppColors.mainColor,[m
+[32m+[m[32m                                size: 13,[m
+[32m+[m[32m                              ),[m
+[32m+[m[32m                              Icon([m
+[32m+[m[32m                                Icons.star,[m
+[32m+[m[32m                                color: AppColors.mainColor,[m
+[32m+[m[32m                                size: 13,[m
+[32m+[m[32m                              ),[m
+[32m+[m[32m                              SizedBox([m
+[32m+[m[32m                                width: 10,[m
+[32m+[m[32m                              ),[m
+[32m+[m[32m                              SmallText([m
+[32m+[m[32m                                text: '4.5',[m
+[32m+[m[32m                                size: 14,[m
+[32m+[m[32m                              ),[m
+[32m+[m[32m                              SizedBox([m
+[32m+[m[32m                                width: 10,[m
+[32m+[m[32m                              ),[m
+[32m+[m[32m                              SmallText([m
+[32m+[m[32m                                text: '1872',[m
+[32m+[m[32m                                size: 14,[m
+[32m+[m[32m                              ),[m
+[32m+[m[32m                              SizedBox([m
+[32m+[m[32m                                width: 10,[m
+[32m+[m[32m                              ),[m
+[32m+[m[32m                              SmallText([m
+[32m+[m[32m                                text: 'Comments',[m
+[32m+[m[32m                                size: 14,[m
+[32m+[m[32m                              )[m
+[32m+[m[32m                            ],[m
+[32m+[m[32m                          )[m
+[32m+[m[32m                        ],[m
+[32m+[m[32m                      ),[m
+[32m+[m[32m                      SizedBox([m
+[32m+[m[32m                        height: 22,[m
+[32m+[m[32m                      ),[m
+[32m+[m[32m                      Row([m
+[32m+[m[32m                        mainAxisAlignment: MainAxisAlignment.spaceAround,[m
+[32m+[m[32m                        children: [[m
+[32m+[m[32m                          IconAndTextWidget([m
+[32m+[m[32m                              icon: Icons.circle,[m
+[32m+[m[32m                              text: 'Normal',[m
+[32m+[m[32m                              fontsize: 14,[m
+[32m+[m[32m                              color: AppColors.mainColor,[m
+[32m+[m[32m                              iconCOlor: AppColors.iconColor1),[m
+[32m+[m[32m                          SizedBox([m
+[32m+[m[32m                            width: 15,[m
+[32m+[m[32m                          ),[m
+[32m+[m[32m                          IconAndTextWidget([m
+[32m+[m[32m                              icon: Icons.location_on,[m
+[32m+[m[32m                              text: '1.72km',[m
+[32m+[m[32m                              fontsize: 14,[m
+[32m+[m[32m                              color: AppColors.mainColor,[m
+[32m+[m[32m                              iconCOlor: AppColors.iconColor2),[m
+[32m+[m[32m                          SizedBox([m
+[32m+[m[32m                            width: 15,[m
+[32m+[m[32m                          ),[m
+[32m+[m[32m                          IconAndTextWidget([m
+[32m+[m[32m                              icon: Icons.access_time_rounded,[m
+[32m+[m[32m                              text: '32min',[m
+[32m+[m[32m                              fontsize: 14,[m
+[32m+[m[32m                              color: AppColors.mainColor,[m
+[32m+[m[32m                              iconCOlor: AppColors.iconColor1),[m
+[32m+[m[32m                        ],[m
+[32m+[m[32m                      )[m
+[32m+[m[32m                    ],[m
+[32m+[m[32m                  ),[m
+[32m+[m[32m                ),[m
+[32m+[m[32m              ),[m
+[32m+[m[32m            )[m
+[32m+[m[32m          ],[m
+[32m+[m[32m        ),[m
+[32m+[m[32m      ),[m
+[32m+[m[32m    );[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[1mdiff --git a/lib/home/main_foodpage.dart b/lib/home/main_foodpage.dart[m
+[1mnew file mode 100644[m
+[1mindex 0000000..f891936[m
+[1m--- /dev/null[m
+[1m+++ b/lib/home/main_foodpage.dart[m
+[36m@@ -0,0 +1,70 @@[m
+[32m+[m[32mimport 'package:ecommerce/home/food_page_body.dart';[m
+[32m+[m[32mimport 'package:ecommerce/utils/colors.dart';[m
+[32m+[m[32mimport 'package:ecommerce/widgets/big_text.dart';[m
+[32m+[m[32mimport 'package:ecommerce/widgets/small_text.dart';[m
+[32m+[m[32mimport 'package:flutter/material.dart';[m
+[32m+[m
+[32m+[m[32mclass MainFoodPage extends StatefulWidget {[m
+[32m+[m[32m  const MainFoodPage({super.key});[m
+[32m+[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  State<MainFoodPage> createState() => _MainFoodPageState();[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mclass _MainFoodPageState extends State<MainFoodPage> {[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  Widget build(BuildContext context) {[m
+[32m+[m[32m    return Scaffold([m
+[32m+[m[32m      body: Column([m
+[32m+[m[32m        children: [[m
+[32m+[m[32m          Container([m
+[32m+[m[32m            child: Container([m
+[32m+[m[32m              margin: EdgeInsets.only(top: 45, bottom: 15),[m
+[32m+[m[32m              padding: EdgeInsets.only(left: 20, right: 20),[m
+[32m+[m[32m              child: Row([m
+[32m+[m[32m                mainAxisAlignment: MainAxisAlignment.spaceBetween,[m
+[32m+[m[32m                children: [[m
+[32m+[m[32m                  Column([m
+[32m+[m[32m                    children: [[m
+[32m+[m[32m                      BigText([m
+[32m+[m[32m                        text: 'Bangkok',[m
+[32m+[m[32m                        color: AppColors.mainColor,[m
+[32m+[m[32m                      ),[m
+[32m+[m[32m                      Row([m
+[32m+[m[32m                        children: [[m
+[32m+[m[32m                          SmallText([m
+[32m+[m[32m                            text: 'City',[m
+[32m+[m[32m                            color: Colors.black54,[m
+[32m+[m[32m                          ),[m
+[32m+[m[32m                          Icon(Icons.arrow_drop_down_rounded)[m
+[32m+[m[32m                        ],[m
+[32m+[m[32m                      )[m
+[32m+[m[32m                    ],[m
+[32m+[m[32m                  ),[m
+[32m+[m[32m                  Center([m
+[32m+[m[32m                    child: Container([m
+[32m+[m[32m                      width: 45,[m
+[32m+[m[32m                      height: 45,[m
+[32m+[m[32m                      decoration: BoxDecoration([m
+[32m+[m[32m                          borderRadius: BorderRadius.circular(15),[m
+[32m+[m[32m                          color: AppColors.mainColor),[m
+[32m+[m[32m                      child: Icon([m
+[32m+[m[32m                        Icons.search,[m
+[32m+[m[32m                        color: Colors.white,[m
+[32m+[m[32m                      ),[m
+[32m+[m[32m                    ),[m
+[32m+[m[32m                  )[m
+[32m+[m[32m                ],[m
+[32m+[m[32m              ),[m
+[32m+[m[32m            ),[m
+[32m+[m[32m          ),[m
+[32m+[m[32m          Container([m
+[32m+[m[32m            height: 320,[m
+[32m+[m[32m            child: FoodPageBody(),[m
+[32m+[m[32m          ),[m
+[32m+[m[41m         [m
+[32m+[m[32m        ],[m
+[32m+[m[32m      ),[m
+[32m+[m[32m    );[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[1mdiff --git a/lib/main.dart b/lib/main.dart[m
+[1mnew file mode 100644[m
+[1mindex 0000000..7818c8b[m
+[1m--- /dev/null[m
+[1m+++ b/lib/main.dart[m
+[36m@@ -0,0 +1,23 @@[m
+[32m+[m[32mimport 'package:ecommerce/home/main_foodpage.dart';[m
+[32m+[m[32mimport 'package:flutter/material.dart';[m
+[32m+[m
+[32m+[m[32mvoid main() {[m
+[32m+[m[32m  runApp(const MyApp());[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mclass MyApp extends StatelessWidget {[m
+[32m+[m[32m  const MyApp({super.key});[m
+[32m+[m
+[32m+[m[32m  // This widget is the root of your application.[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  Widget build(BuildContext context) {[m
+[32m+[m[32m    return MaterialApp([m
+[32m+[m[32m      debugShowCheckedModeBanner: false,[m
+[32m+[m[32m      title: 'Flutter Demo',[m
+[32m+[m[32m      theme: ThemeData([m
+[32m+[m[32m        primarySwatch: Colors.blue,[m
+[32m+[m[32m      ),[m
+[32m+[m[32m      home: const MainFoodPage(),[m
+[32m+[m[32m    );[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[1mdiff --git a/lib/utils/colors.dart b/lib/utils/colors.dart[m
+[1mnew file mode 100644[m
+[1mindex 0000000..1af33f0[m
+[1m--- /dev/null[m
+[1m+++ b/lib/utils/colors.dart[m
+[36m@@ -0,0 +1,17 @@[m
+[32m+[m[32mimport 'dart:ui';[m
+[32m+[m
+[32m+[m[32mclass AppColors{[m
+[32m+[m[32m  static final Color textColor = const Color(0xFFccc7c5);[m
+[32m+[m[32m  static final Color mainColor = const Color(0xFF89dad0);[m
+[32m+[m[32m  //static final Color mainColor = const Color(0xFFfa7552);[m
+[32m+[m[32m  static final Color iconColor1 = const Color(0xFFffd28d);[m
+[32m+[m[32m  static final Color iconColor2 = const Color(0xFFfcab88);[m
+[32m+[m[32m  static final Color paraColor = const Color(0xFF8f837f);[m
+[32m+[m[32m  static final Color buttonBackgroundColor= const Color(0xFFf7f6f4);[m
+[32m+[m[32m  static final Color signColor = const Color(0xFFa9a29f);[m
+[32m+[m[32m  static final Color titleColor = const Color(0xFF5c524f);[m
+[32m+[m[32m  static final Color mainBlackColor = const Color(0xFF332d2b);[m
+[32m+[m[32m  //static final Color yellowColor = const Color(0xFFfa7552);[m
+[32m+[m[32m  static final Color yellowColor = const Color(0xFFffd379);[m
+[32m+[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/lib/widgets/big_text.dart b/lib/widgets/big_text.dart[m
+[1mnew file mode 100644[m
+[1mindex 0000000..98d9c46[m
+[1m--- /dev/null[m
+[1m+++ b/lib/widgets/big_text.dart[m
+[36m@@ -0,0 +1,27 @@[m
+[32m+[m[32mimport 'package:flutter/material.dart';[m
+[32m+[m
+[32m+[m[32mclass BigText extends StatelessWidget {[m
+[32m+[m[32m  final Color? color;[m
+[32m+[m[32m  final String text;[m
+[32m+[m[32m  final double size;[m
+[32m+[m[32m  final TextOverflow overFlow;[m
+[32m+[m[32m  const BigText([m
+[32m+[m[32m      {super.key,[m
+[32m+[m[32m      this.color = const Color(0xFF332d2b),[m
+[32m+[m[32m      required this.text,[m
+[32m+[m[32m      this.overFlow = TextOverflow.ellipsis,[m
+[32m+[m[32m      this.size = 20});[m
+[32m+[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  Widget build(BuildContext context) {[m
+[32m+[m[32m    return Text([m
+[32m+[m[32m      text,maxLines: 1,[m
+[32m+[m[32m      overflow: overFlow,[m
+[32m+[m[32m      style: TextStyle([m
+[32m+[m[32m          color: color,[m
+[32m+[m[32m          fontWeight: FontWeight.w400,[m
+[32m+[m[32m          fontFamily: 'Roboto',[m
+[32m+[m[32m          fontSize: size),[m
+[32m+[m[32m    );[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[1mdiff --git a/lib/widgets/icon_add_text.dart b/lib/widgets/icon_add_text.dart[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c6cca15[m
+[1m--- /dev/null[m
+[1m+++ b/lib/widgets/icon_add_text.dart[m
+[36m@@ -0,0 +1,37 @@[m
+[32m+[m[32mimport 'package:ecommerce/widgets/small_text.dart';[m
+[32m+[m[32mimport 'package:flutter/material.dart';[m
+[32m+[m
+[32m+[m[32mclass IconAndTextWidget extends StatelessWidget {[m
+[32m+[m[32m  final IconData icon;[m
+[32m+[m[32m  final String text;[m
+[32m+[m[32m  final double fontsize;[m
+[32m+[m[32m  final Color color;[m
+[32m+[m[32m  final Color iconCOlor;[m
+[32m+[m[32m  const IconAndTextWidget({[m
+[32m+[m[32m    super.key,[m
+[32m+[m[32m    required this.icon,[m
+[32m+[m[32m    required this.iconCOlor,[m
+[32m+[m[32m    required this.text,[m
+[32m+[m[32m    required this.color,[m
+[32m+[m[32m    required this.fontsize[m
+[32m+[m[32m  });[m
+[32m+[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  Widget build(BuildContext context) {[m
+[32m+[m[32m    return Row([m
+[32m+[m[32m      children: [[m
+[32m+[m[32m        Icon([m
+[32m+[m[32m          icon,[m
+[32m+[m[32m          color: iconCOlor,[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        SizedBox([m
+[32m+[m[32m          width: 5,[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        SmallText([m
+[32m+[m[32m          text: text,[m
+[32m+[m[32m          color: color,size: fontsize,[m
+[32m+[m[32m        )[m
+[32m+[m[32m      ],[m
+[32m+[m[32m    );[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[1mdiff --git a/lib/widgets/iconwithtext.dart b/lib/widgets/iconwithtext.dart[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c06d8d3[m
+[1m--- /dev/null[m
+[1m+++ b/lib/widgets/iconwithtext.dart[m
+[36m@@ -0,0 +1,24 @@[m
+[32m+[m[32mimport 'package:ecommerce/utils/colors.dart';[m
+[32m+[m[32mimport 'package:flutter/material.dart';[m
+[32m+[m
+[32m+[m[32mclass icon_with_text extends StatelessWidget {[m
+[32m+[m[32m  final String text;[m
+[32m+[m[32m  final double size;[m
+[32m+[m[32m  final IconData icon;[m
+[32m+[m[32m  const icon_with_text([m
+[32m+[m[32m      {super.key, required this.text, required this.icon, required this.size});[m
+[32m+[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  Widget build(BuildContext context) {[m
+[32m+[m[32m    return Container([m
+[32m+[m[32m        child: Row([m
+[32m+[m[32m      children: [[m
+[32m+[m[32m        Text([m
+[32m+[m[32m          text,[m
+[32m+[m[32m          style: TextStyle(fontSize: size, color: AppColors.mainColor),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        Icon(icon)[m
+[32m+[m[32m      ],[m
+[32m+[m[32m    ));[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[1mdiff --git a/lib/widgets/small_text.dart b/lib/widgets/small_text.dart[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e3a4d81[m
+[1m--- /dev/null[m
+[1m+++ b/lib/widgets/small_text.dart[m
+[36m@@ -0,0 +1,24 @@[m
+[32m+[m[32mimport 'package:flutter/material.dart';[m
+[32m+[m
+[32m+[m[32mclass SmallText extends StatelessWidget {[m
+[32m+[m[32m  final Color? color;[m
+[32m+[m[32m  final String text;[m
+[32m+[m[32m  final double size;[m
+[32m+[m[32m  final double height;[m
+[32m+[m
+[32m+[m[32m  const SmallText([m
+[32m+[m[32m      {super.key,[m
+[32m+[m[32m      this.color = const Color(0xFF89dad0),[m
+[32m+[m[32m      required this.text,[m
+[32m+[m[32m      this.size = 12,[m
+[32m+[m[32m      this.height = 1.2});[m
+[32m+[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  Widget build(BuildContext context) {[m
+[32m+[m[32m    return Text([m
+[32m+[m[32m      text,[m
+[32m+[m[32m      style:[m
+[32m+[m[32m          TextStyle(color: color, fontWeight: FontWeight.w400, fontSize: size),[m
+[32m+[m[32m    );[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[1mdiff --git a/pubspec.yaml b/pubspec.yaml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..28fe619[m
+[1m--- /dev/null[m
+[1m+++ b/pubspec.yaml[m
+[36m@@ -0,0 +1,106 @@[m
+[32m+[m[32mname: ecommerce[m
+[32m+[m[32mdescription: A new Flutter project.[m
+[32m+[m
+[32m+[m[32m# The following line prevents the package from being accidentally published to[m
+[32m+[m[32m# pub.dev using `flutter pub publish`. This is preferred for private packages.[m
+[32m+[m[32mpublish_to: 'none' # Remove this line if you wish to publish to pub.dev[m
+[32m+[m
+[32m+[m[32m# The following defines the version and build number for your application.[m
+[32m+[m[32m# A version number is three numbers separated by dots, like 1.2.43[m
+[32m+[m[32m# followed by an optional build number separated by a +.[m
+[32m+[m[32m# Both the version and the builder number may be overridden in flutter[m
+[32m+[m[32m# build by specifying --build-name and --build-number, respectively.[m
+[32m+[m[32m# In Android, build-name is used as versionName while build-number used as versionCode.[m
+[32m+[m[32m# Read more about Android versioning at https://developer.android.com/studio/publish/versioning[m
+[32m+[m[32m# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.[m
+[32m+[m[32m# Read more about iOS versioning at[m
+[32m+[m[32m# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html[m
+[32m+[m[32m# In Windows, build-name is used as the major, minor, and patch parts[m
+[32m+[m[32m# of the product and file versions while build-number is used as the build suffix.[m
+[32m+[m[32mversion: 1.0.0+1[m
+[32m+[m
+[32m+[m[32menvironment:[m
+[32m+[m[32m  sdk: '>=2.18.5 <3.0.0'[m
+[32m+[m
+[32m+[m[32m# Dependencies specify other packages that your package needs in order to work.[m
+[32m+[m[32m# To automatically upgrade your package dependencies to the latest versions[m
+[32m+[m[32m# consider running `flutter pub upgrade --major-versions`. Alternatively,[m
+[32m+[m[32m# dependencies can be manually updated by changing the version numbers below to[m
+[32m+[m[32m# the latest version available on pub.dev. To see which dependencies have newer[m
+[32m+[m[32m# versions available, run `flutter pub outdated`.[m
+[32m+[m[32mdependencies:[m
+[32m+[m[32m  flutter:[m
+[32m+[m[32m    sdk: flutter[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  # The following adds the Cupertino Icons font to your application.[m
+[32m+[m[32m  # Use with the CupertinoIcons class for iOS style icons.[m
+[32m+[m[32m  cupertino_icons: ^1.0.2[m
+[32m+[m[32m  auto_size_text: ^3.0.0[m
+[32m+[m[32m  dots_indicator: ^2.1.0[m
+[32m+[m
+[32m+[m[32mdev_dependencies:[m
+[32m+[m[32m  flutter_test:[m
+[32m+[m[32m    sdk: flutter[m
+[32m+[m
+[32m+[m[32m  # The "flutter_lints" package below contains a set of recommended lints to[m
+[32m+[m[32m  # encourage good coding practices. The lint set provided by the package is[m
+[32m+[m[32m  # activated in the `analysis_options.yaml` file located at the root of your[m
+[32m+[m[32m  # package. See that file for information about deactivating specific lint[m
+[32m+[m[32m  # rules and activating additional ones.[m
+[32m+[m[32m  flutter_lints: ^2.0.0[m
+[32m+[m
+[32m+[m[32m# For information on the generic Dart part of this file, see the[m
+[32m+[m[32m# following page: https://dart.dev/tools/pub/pubspec[m
+[32m+[m
+[32m+[m[32m# The following section is specific to Flutter packages.[m
+[32m+[m[32mflutter:[m
+[32m+[m
+[32m+[m[32m  # The following line ensures that the Material Icons font is[m
+[32m+[m[32m  # included with your application, so that you can use the icons in[m
+[32m+[m[32m  # the material Icons class.[m
+[32m+[m[32m  uses-material-design: true[m
+[32m+[m
+[32m+[m[32m  # To add assets to your application, add an assets section, like this:[m
+[32m+[m[32m  assets:[m
+[32m+[m[32m      - assets/image/[m
+[32m+[m[32m  #   - images/a_dot_burr.jpeg[m
+[32m+[m[32m  #   - images/a_dot_ham.jpeg[m
+[32m+[m
+[32m+[m[32m  fonts:[m
+[32m+[m[32m    - family: Roboto[m
+[32m+[m[32m      fonts:[m
+[32m+[m[32m        - asset: assets/font/Roboto-Regular.ttf[m
+[32m+[m[32m          weight: 400[m
+[32m+[m[32m        - asset: assets/font/Roboto-Medium.ttf[m
+[32m+[m[32m          weight: 500[m
+[32m+[m[32m        - asset: assets/font/Roboto-Bold.ttf[m
+[32m+[m[32m          weight: 700[m
+[32m+[m[32m        - asset: assets/font/Roboto-Black.ttf[m
+[32m+[m[32m          weight: 900[m
+[32m+[m
+[32m+[m[32m  # An image asset can refer to one or more resolution-specific "variants", see[m
+[32m+[m[32m  # https://flutter.dev/assets-and-images/#resolution-aware[m
+[32m+[m
+[32m+[m[32m  # For details regarding adding assets from package dependencies, see[m
+[32m+[m[32m  # https://flutter.dev/assets-and-images/#from-packages[m
+[32m+[m
+[32m+[m[32m  # To add custom fonts to your application, add a fonts section here,[m
+[32m+[m[32m  # in this "flutter" section. Each entry in this list should have a[m
+[32m+[m[32m  # "family" key with the font family name, and a "fonts" key with a[m
+[32m+[m[32m  # list giving the asset and other descriptors for the font. For[m
+[32m+[m[32m  # example:[m
+[32m+[m[32m  # fonts:[m
+[32m+[m[32m  #   - family: Schyler[m
+[32m+[m[32m  #     fonts:[m
+[32m+[m[32m  #       - asset: fonts/Schyler-Regular.ttf[m
+[32m+[m[32m  #       - asset: fonts/Schyler-Italic.ttf[m
+[32m+[m[32m  #         style: italic[m
+[32m+[m[32m  #   - family: Trajan Pro[m
+[32m+[m[32m  #     fonts:[m
+[32m+[m[32m  #       - asset: fonts/TrajanPro.ttf[m
+[32m+[m[32m  #       - asset: fonts/TrajanPro_Bold.ttf[m
+[32m+[m[32m  #         weight: 700[m
+[32m+[m[32m  #[m
+[32m+[m[32m  # For details regarding fonts from package dependencies,[m
+[32m+[m[32m  # see https://flutter.dev/custom-fonts/#from-packages[m
